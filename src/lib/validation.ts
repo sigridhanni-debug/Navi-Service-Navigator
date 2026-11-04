@@ -38,10 +38,10 @@ export const leadPatchSchema = z.object({
 });
 
 export const navigatorSchema = z.object({
-  challenge: z.string().min(1),
+  challenge: z.enum(["outdated-accounting", "scattered-data", "use-ai", "it-security"]),
   size: z.enum(["small", "mid", "enterprise"]),
-  systems: z.array(z.string()).min(1),
-  timeline: z.string().min(1),
+  systems: z.array(z.enum(["excel", "old-erp", "dynamics", "other"])).min(1),
+  timeline: z.enum(["asap", "3-6", "6-12", "exploring"]),
 });
 
 export type NavigatorAnswers = z.infer<typeof navigatorSchema>;

@@ -2,29 +2,29 @@ import type { ServiceDTO } from "./constants";
 import { sizeLabel } from "./constants";
 import type { NavigatorAnswers } from "./validation";
 
-type Option = { value: string; label: string; hint?: string; tags: string[] };
+type Option = { value: string; label: string; hint?: string; reason?: string; tags: string[] };
 
 export const CHALLENGES: Option[] = [
   {
-    value: "outdated-accounting",
+    value: "outdated-accounting", reason: "replacing an outdated accounting or ERP system",
     label: "Our accounting / ERP system is outdated",
     hint: "Manual work, old software, no remote access",
     tags: ["old-system", "erp", "accounting", "finance", "upgrade", "nav"],
   },
   {
-    value: "scattered-data",
+    value: "scattered-data", reason: "bringing scattered data and reporting together",
     label: "Our data and reporting are scattered",
     hint: "Numbers live in many places and reports take days",
     tags: ["scattered-data", "data", "reporting", "bi", "dashboards", "integration", "power-bi"],
   },
   {
-    value: "use-ai",
+    value: "use-ai", reason: "getting started with AI",
     label: "We want to start using AI",
     hint: "Copilot, automation, AI agents",
     tags: ["ai", "copilot", "automation", "agents", "productivity"],
   },
   {
-    value: "it-security",
+    value: "it-security", reason: "getting IT security under control",
     label: "Our IT security is unclear",
     hint: "NIS2, risks, monitoring, who is responsible",
     tags: ["security", "risk", "compliance", "nis2", "audit", "monitoring", "it"],
@@ -38,10 +38,10 @@ export const SIZES: Option[] = [
 ];
 
 export const SYSTEMS: Option[] = [
-  { value: "excel", label: "Excel / spreadsheets", tags: ["excel", "reporting", "bi", "planning"] },
-  { value: "old-erp", label: "An old ERP or accounting system", tags: ["old-system", "nav", "upgrade", "selection"] },
-  { value: "dynamics", label: "Microsoft Dynamics", tags: ["dynamics", "support", "optimisation", "copilot", "adoption"] },
-  { value: "other", label: "Other systems", tags: ["integration", "selection", "requirements", "analysis"] },
+  { value: "excel", reason: "Excel", label: "Excel / spreadsheets", tags: ["excel", "reporting", "bi", "planning"] },
+  { value: "old-erp", reason: "your current legacy ERP", label: "An old ERP or accounting system", tags: ["old-system", "nav", "upgrade", "selection"] },
+  { value: "dynamics", reason: "Microsoft Dynamics", label: "Microsoft Dynamics", tags: ["dynamics", "support", "optimisation", "copilot", "adoption"] },
+  { value: "other", reason: "your other systems", label: "Other systems", tags: ["integration", "selection", "requirements", "analysis"] },
 ];
 
 export const TIMELINES: Option[] = [
@@ -85,19 +85,19 @@ export function recommend(services: ServiceDTO[], answers: NavigatorAnswers, lim
     const challengeHits = (challenge?.tags ?? []).filter((t) => tags.has(t));
     if (challengeHits.length) {
       points += WEIGHTS.challenge * Math.min(challengeHits.length, 3);
-      reasons.push(`Directly addresses “${challenge!.label.toLowerCase()}” (${challengeHits.slice(0, 3).join(", ")}).`);
+      reasons.push(`Directly helps with ${challenge!.reason}.`);
     }
 
     const systemHits = new Set<string>();
     const matchedSystems: string[] = [];
     for (const sys of systems) {
       const hits = sys.tags.filter((t) => tags.has(t));
-      if (hits.length) matchedSystems.push(sys.label.toLowerCase());
+      if (hits.length) matchedSystems.push(sys.reason ?? sys.label);
       hits.forEach((h) => systemHits.add(h));
     }
     if (systemHits.size) {
       points += WEIGHTS.system * Math.min(systemHits.size, 2);
-      reasons.push(`Fits your current setup: ${matchedSystems.join(" and ")}.`);
+      reasons.push(`Builds on what you use today: ${matchedSystems.join(" and ")}.`);
     }
 
     if (service.companySizes.includes(answers.size)) {

@@ -9,5 +9,6 @@ export function splitProblems(text: string) {
   return text
     .split(";")
     .map((s) => s.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1));
 }

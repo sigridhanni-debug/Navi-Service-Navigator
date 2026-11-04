@@ -65,7 +65,7 @@ export function Catalogue({ services }: { services: ServiceDTO[] }) {
                 type="search"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="Search e.g. “Power BI”, “Excel”, “NIS2”…"
+                placeholder="Search e.g. Power BI, Excel, NIS2"
                 className="h-14 w-full rounded-xl border border-slate-200 bg-white pl-12 pr-4 text-base text-navy shadow-sm placeholder:text-slate-400 focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15"
               />
             </div>

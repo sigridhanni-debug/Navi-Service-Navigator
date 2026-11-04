@@ -7,8 +7,9 @@ export const dynamic = "force-dynamic";
 
 const csvCell = (v: unknown) => {
   const s = v == null ? "" : String(v);
-  // Quote everything; neutralise spreadsheet formula injection.
-  const safe = /^[=+\-@]/.test(s) ? `'${s}` : s;
+  // Quote everything; neutralise spreadsheet formula injection (but keep phone numbers like +372 … intact).
+  const isPhone = /^\+[\d\s()-]+$/.test(s);
+  const safe = !isPhone && /^[=+\-@]/.test(s) ? `'${s}` : s;
   return `"${safe.replace(/"/g, '""')}"`;
 };
 

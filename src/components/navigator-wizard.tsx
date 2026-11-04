@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Check, Loader2, RotateCcw, Sparkles } from "lucide-react";
 import { CHALLENGES, SIZES, SYSTEMS, TIMELINES, type Recommendation } from "@/lib/recommend";
@@ -67,6 +67,11 @@ export function NavigatorWizard() {
   const [results, setResults] = useState<Recommendation[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Bring the next question / the results into view (matters on phones).
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step, results]);
 
   const current = STEPS[step];
   const value = answers[current.key];

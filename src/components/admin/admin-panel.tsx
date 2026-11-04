@@ -276,7 +276,7 @@ function LeadsTab() {
                           aria-label={`Status for ${l.company}`}
                           value={l.status}
                           onChange={(e) => setStatus(l, e.target.value as Lead["status"])}
-                          className={cn("h-8 w-32 border font-medium", STATUS_STYLE[l.status])}
+                          className={cn("h-8 w-36 border font-medium", STATUS_STYLE[l.status])}
                         >
                           {LEAD_STATUSES.map((s) => (
                             <option key={s} value={s}>{s}</option>
